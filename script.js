@@ -10,11 +10,26 @@ const currentTimeEl = document.getElementById('current-time');
 const durationEl = document.getElementById('duration');
 
 // --- 2. 音楽データとプレイヤーの状態管理 ---
+
+// [Modified!] ファイルパスの先頭に "./" を追加
 const songs = [
-    { title: '晴れやかな朝', artist: 'フリーBGM作家さん', filePath: 'musics/sample.mp3' },
-    { title: '午後のカフェテラス', artist: 'BGMの匠', filePath: 'musics/sample2.mp3' },
-    { title: '星降る夜に', artist: 'Sound Creator', filePath: 'musics/sample3.mp3' }
+    {
+        title: '晴れやかな朝',
+        artist: 'フリーBGM作家さん',
+        filePath: './musics/sample.mp3' // ←ここを変更
+    },
+    {
+        title: '午後のカフェテラス',
+        artist: 'BGMの匠',
+        filePath: './musics/sample2.mp3' // ←ここを変更
+    },
+    {
+        title: '星降る夜に',
+        artist: 'Sound Creator',
+        filePath: './musics/sample3.mp3' // ←ここを変更
+    }
 ];
+
 let songIndex = 0;
 const audio = new Audio();
 let isPlaying = false;
