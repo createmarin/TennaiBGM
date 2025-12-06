@@ -13,9 +13,9 @@ const durationEl = document.getElementById('duration');
 
 // --- 2. 音楽データとプレイヤーの状態管理 (追加あり) ---
 const songs = [
-    { title: '晴れやかな朝', artist: 'BGM作家1', filePath: '/TennaiBGM/musics/BGM1.mp3' },
-    { title: '午後のカフェテラス', artist: 'BGM作家2', filePath: '/TennaiBGM/musics/BGM2.mp3' },
-    { title: '星降る夜に', artist: 'BGM作家3', filePath: '/TennaiBGM/musics/BGM3.mp3' }
+    { title: '晴れやかな朝', artist: 'BGM作家1', filePath: '/TennaiBGM/musics/sample.mp3' },
+    { title: '午後のカフェテラス', artist: 'BGM作家2', filePath: '/TennaiBGM/musics/sample2.mp3' },
+    { title: '星降る夜に', artist: 'BGM作家3', filePath: '/TennaiBGM/musics/sample3.mp3' }
 ];
 
 let songIndex = 0;
