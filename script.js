@@ -11,22 +11,22 @@ const durationEl = document.getElementById('duration');
 
 // --- 2. 音楽データとプレイヤーの状態管理 ---
 
-// [Modified!] ファイルパスをリポジトリのルートからのパスに変更
+// [最終修正版] ファイルパスをリポジトリ名から始まる絶対パスに変更します
 const songs = [
     {
         title: '晴れやかな朝',
         artist: 'フリーBGM作家さん',
-        filePath: '/TennaiBGM/musics/sample.mp3' // ←ここを変更
+        filePath: '/TennaiBGM/musics/sample.mp3'
     },
     {
         title: '午後のカフェテラス',
         artist: 'BGMの匠',
-        filePath: '/TennaiBGM/musics/sample2.mp3' // ←ここを変更
+        filePath: '/TennaiBGM/musics/sample2.mp3'
     },
     {
         title: '星降る夜に',
         artist: 'Sound Creator',
-        filePath: '/TennaiBGM/musics/sample3.mp3' // ←ここを変更
+        filePath: '/TennaiBGM/musics/sample3.mp3'
     }
 ];
 
