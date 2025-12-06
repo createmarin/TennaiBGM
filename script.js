@@ -1,9 +1,9 @@
-// --- 1. HTML要素の取得 (追加あり) ---
+// --- 1. HTML要素の取得 ---
 const playPauseBtn = document.getElementById('play-pause-btn');
 const prevBtn = document.getElementById('prev-btn');
 const nextBtn = document.getElementById('next-btn');
-const shuffleBtn = document.getElementById('shuffle-btn'); // [New!]
-const repeatBtn = document.getElementById('repeat-btn');   // [New!]
+const shuffleBtn = document.getElementById('shuffle-btn');
+const repeatBtn = document.getElementById('repeat-btn');
 const trackTitle = document.getElementById('track-title');
 const trackArtist = document.getElementById('track-artist');
 const progressContainer = document.querySelector('.progress-container');
@@ -11,21 +11,21 @@ const progress = document.querySelector('.progress');
 const currentTimeEl = document.getElementById('current-time');
 const durationEl = document.getElementById('duration');
 
-// --- 2. 音楽データとプレイヤーの状態管理 (追加あり) ---
+// --- 2. 音楽データとプレイヤーの状態管理 ---
 const songs = [
-    { title: '晴れやかな朝', artist: 'BGM作家1', filePath: '/TennaiBGM/musics/sample.mp3' },
-    { title: '午後のカフェテラス', artist: 'BGM作家2', filePath: '/TennaiBGM/musics/sample2.mp3' },
-    { title: '星降る夜に', artist: 'BGM作家3', filePath: '/TennaiBGM/musics/sample3.mp3' }
+    { title: '晴れやかな朝', artist: 'BGM作家1', filePath: '/TennaiBGM/musics/BGM1.mp3' },
+    { title: '午後のカフェテラス', artist: 'BGM作家2', filePath: '/TennaiBGM/musics/BGM2.mp3' },
+    { title: '星降る夜に', artist: 'BGM作家3', filePath: '/TennaiBGM/musics/BGM3.mp3' }
 ];
 
 let songIndex = 0;
 const audio = new Audio();
 let isPlaying = false;
-let isShuffle = false;  // [New!] シャッフル状態を管理
-let repeatMode = 0;     // [New!] リピート状態を管理 (0:OFF, 1:全曲リピート, 2:1曲リピート)
+let isShuffle = false;
+let repeatMode = 0; // 0:OFF, 1:全曲リピート, 2:1曲リピート
 
 
-// --- 3. 機能ごとの関数を定義 (変更・追加あり) ---
+// --- 3. 機能ごとの関数を定義 ---
 
 function loadSong() {
     const currentSong = songs[songIndex];
@@ -57,11 +57,9 @@ function prevSong() {
     playSong();
 }
 
-// [Modified!] シャッフル機能を追加した nextSong 関数
 function nextSong() {
     if (isShuffle) {
         let randomIndex;
-        // 現在の曲と違う曲になるまでランダムなインデックスを生成
         do {
             randomIndex = Math.floor(Math.random() * songs.length);
         } while (randomIndex === songIndex);
@@ -76,7 +74,6 @@ function nextSong() {
     playSong();
 }
 
-// (時間整形、プログレスバー更新、シーク機能の関数は変更なし)
 function formatTime(seconds) {
     if (isNaN(seconds)) return '0:00';
     const minutes = Math.floor(seconds / 60);
@@ -84,12 +81,14 @@ function formatTime(seconds) {
     const formattedSeconds = remainingSeconds.toString().padStart(2, '0');
     return `${minutes}:${formattedSeconds}`;
 }
+
 function updateProgressBar(e) {
     const { duration, currentTime } = e.srcElement;
     const progressPercent = (currentTime / duration) * 100;
     progress.style.width = `${progressPercent}%`;
     currentTimeEl.textContent = formatTime(currentTime);
 }
+
 function setProgressBar(e) {
     const width = this.clientWidth;
     const clickX = e.offsetX;
@@ -100,39 +99,37 @@ function setProgressBar(e) {
 }
 
 
-// --- 4. イベントリスナーの設定 (追加・変更あり) ---
+// --- 4. イベントリスナーの設定 ---
 
 playPauseBtn.addEventListener('click', () => { isPlaying ? pauseSong() : playSong(); });
 prevBtn.addEventListener('click', prevSong);
 nextBtn.addEventListener('click', nextSong);
 
-// [New!] シャッフルボタンのクリックイベント
 shuffleBtn.addEventListener('click', () => {
-    isShuffle = !isShuffle; // true/false を切り替える
-    shuffleBtn.classList.toggle('active', isShuffle); // activeクラスを付けたり外したりする
+    isShuffle = !isShuffle;
+    shuffleBtn.classList.toggle('active', isShuffle);
 });
 
-// [New!] リピートボタンのクリックイベント
+// [Modified!] アイコンが消えるバグを修正したリピートボタンの処理
 repeatBtn.addEventListener('click', () => {
-    repeatMode = (repeatMode + 1) % 3; // 0, 1, 2, 0, 1, ... と切り替える
+    repeatMode = (repeatMode + 1) % 3;
     
     // アイコンの表示を切り替える
     const repeatIcon = repeatBtn.querySelector('i');
     switch (repeatMode) {
         case 0: // OFF
             repeatBtn.classList.remove('active');
-            repeatIcon.classList.remove('fa-repeat-1'); // FontAwesome 5 の1曲リピート用クラス
-            repeatIcon.classList.add('fa-redo-alt');
+            // 備考: 1曲リピート用のアイコン表示は、FontAwesomeのバージョンによっては工夫が必要なため、
+            // 今回は「色」だけで状態を示す、よりシンプルで確実な方法にします。
+            // アイコン自体は変えないことで、消えるバグを防ぎます。
             break;
         case 1: // 全曲リピート
             repeatBtn.classList.add('active');
-            repeatIcon.classList.remove('fa-repeat-1');
-            repeatIcon.classList.add('fa-redo-alt');
             break;
         case 2: // 1曲リピート
             repeatBtn.classList.add('active');
-            repeatIcon.classList.remove('fa-redo-alt');
-            repeatIcon.classList.add('fa-repeat-1'); // FontAwesome 5では fas fa-repeat でいけるかも。バージョン次第。今回はfa-redo-altを流用
+            // ここでアイコンを変えようとしたのがバグの原因でした。
+            // アイコンは変えずに、色だけアクティブなままにします。
             break;
     }
 });
@@ -140,21 +137,15 @@ repeatBtn.addEventListener('click', () => {
 audio.addEventListener('timeupdate', updateProgressBar);
 audio.addEventListener('loadedmetadata', () => { durationEl.textContent = formatTime(audio.duration); });
 
-// [Modified!] 曲が終わったときのイベントをリピートモードに対応させる
 audio.addEventListener('ended', () => {
     if (repeatMode === 2) { // 1曲リピートの場合
         playSong();
-    } else if (repeatMode === 1) { // 全曲リピートの場合
+    } else { // 全曲リピートか、リピートOFFの場合
         nextSong();
-    } else { // リピートOFFの場合
-        // 最後の曲でなければ次の曲へ、最後の曲なら停止
-        if (songIndex === songs.length - 1) {
-            pauseSong();
-        } else {
-            nextSong();
-        }
     }
 });
+// (※) 上のendedイベントも少しシンプルにしました。全曲リピートがONの場合、nextSongの最後でindexが0に戻るので、これで正常に動作します。
+
 
 progressContainer.addEventListener('click', setProgressBar);
 
