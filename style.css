@@ -250,3 +250,7 @@ body {
     #track-artist { font-size: 14px; }
     .progress-container { width: 95%; }
 }
+
+.control-btn.active {
+    color: var(--primary-color);
+}
