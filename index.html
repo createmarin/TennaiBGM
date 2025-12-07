@@ -5,75 +5,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>店内BGMプレイヤー</title>
     <link rel="stylesheet" href="style.css">
-    <!-- アイコン表示のためのライブラリを読み込みます -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
     <div class="app-container">
-        <!-- 左側のナビゲーションメニュー (今回は見た目のみ) -->
+        <!-- 左側のナビゲーションメニュー -->
         <nav class="sidebar">
             <div class="sidebar-header">
                 <h2>BGM Control</h2>
             </div>
             <ul>
-                <li class="active"><a href="#"><i class="fas fa-play"></i> プレイヤー</a></li>
-                <li><a href="#"><i class="fas fa-list"></i> プレイリスト編集</a></li>
-                <li><a href="#"><i class="fas fa-calendar-alt"></i> スケジュール設定</a></li>
-                <li><a href="#"><i class="fas fa-music"></i> 音源管理</a></li>
+                <!-- 各メニューにIDを付けます -->
+                <li id="menu-player"><a href="#"><i class="fas fa-play"></i> プレイヤー</a></li>
+                <li id="menu-playlists" class="active"><a href="#"><i class="fas fa-list"></i> プレイリスト編集</a></li>
+                <li id="menu-schedule"><a href="#"><i class="fas fa-calendar-alt"></i> スケジュール設定</a></li>
+                <li id="menu-library"><a href="#"><i class="fas fa-music"></i> 音源管理</a></li>
             </ul>
         </nav>
 
         <!-- 右側のメインコンテンツエリア -->
         <main class="main-content">
-            <header class="player-header">
-                <div class="schedule-info">
-                    <p>現在のスケジュール</p>
-                    <h3><i class="fas fa-clock"></i> 平日ランチタイムBGM</h3>
-                </div>
-                <div class="manual-announce">
-                    <button class="announce-button"><i class="fas fa-microphone-alt"></i> 手動割り込み</button>
-                </div>
-            </header>
-            
-            <div class="player-body">
-                <div class="artwork">
-                    <!-- ここにジャケット画像が表示されるイメージ -->
-                    <i class="fas fa-record-vinyl"></i>
-                </div>
-                <div class="track-info">
-                    <h2 id="track-title">曲のタイトルが入ります</h2>
-                    <p id="track-artist">アーティスト名</p>
-                </div>
+            <!-- プレイヤー画面 (普段は非表示) -->
+            <div id="player-view" style="display: none;">
+                <!-- ここに以前のプレイヤーのHTMLが丸ごと入ります (次のステップでJSで制御) -->
+            </div>
 
-                <div class="progress-container">
-                    <div class="progress-bar">
-                        <div class="progress"></div>
+            <!-- プレイリスト編集画面 (表示状態) -->
+            <div id="playlists-view">
+                <header class="view-header">
+                    <h1><i class="fas fa-list"></i> プレイリスト編集</h1>
+                </header>
+
+                <div class="playlists-body">
+                    <!-- 左半分: プレイリスト一覧 -->
+                    <div class="playlist-list-panel">
+                        <div class="panel-header">
+                            <h2>プレイリスト</h2>
+                            <button class="btn-primary"><i class="fas fa-plus"></i> 新規作成</button>
+                        </div>
+                        <ul class="playlist-items">
+                            <li class="active-playlist">
+                                <span><i class="fas fa-music"></i> ランチタイム用</span>
+                                <button class="btn-icon"><i class="fas fa-trash-alt"></i></button>
+                            </li>
+                            <li>
+                                <span><i class="fas fa-moon"></i> ディナーBGM</span>
+                                <button class="btn-icon"><i class="fas fa-trash-alt"></i></button>
+                            </li>
+                            <li>
+                                <span><i class="fas fa-cloud-sun"></i> 休日の午後</span>
+                                <button class="btn-icon"><i class="fas fa-trash-alt"></i></button>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="time-display">
-                        <span id="current-time">0:00</span>
-                        <span id="duration">0:00</span>
+
+                    <!-- 右半分: 選択中のプレイリストの曲と、全曲ライブラリ -->
+                    <div class="playlist-details-panel">
+                        <!-- 選択中のプレイリストの曲 -->
+                        <div class="panel-header">
+                            <h2>ランチタイム用 の曲一覧</h2>
+                        </div>
+                        <ul class="song-list">
+                            <li>
+                                <span class="song-title">晴れやかな朝</span>
+                                <span class="song-artist">BGM作家1</span>
+                                <button class="btn-icon btn-danger"><i class="fas fa-minus-circle"></i> 削除</button>
+                            </li>
+                            <li>
+                                <span class="song-title">星降る夜に</span>
+                                <span class="song-artist">BGM作家3</span>
+                                <button class="btn-icon btn-danger"><i class="fas fa-minus-circle"></i> 削除</button>
+                            </li>
+                        </ul>
+
+                        <!-- 全曲ライブラリ -->
+                        <div class="panel-header" style="margin-top: 30px;">
+                            <h2>すべての曲（ライブラリ）</h2>
+                        </div>
+                        <ul class="song-list">
+                            <li>
+                                <span class="song-title">晴れやかな朝</span>
+                                <span class="song-artist">BGM作家1</span>
+                                <button class="btn-icon btn-success"><i class="fas fa-plus-circle"></i> 追加</button>
+                            </li>
+                            <li>
+                                <span class="song-title">午後のカフェテラス</span>
+                                <span class="song-artist">BGM作家2</span>
+                                <button class="btn-icon btn-success"><i class="fas fa-plus-circle"></i> 追加</button>
+                            </li>
+                            <li>
+                                <span class="song-title">星降る夜に</span>
+                                <span class="song-artist">BGM作家3</span>
+                                <button class="btn-icon btn-success"><i class="fas fa-plus-circle"></i> 追加</button>
+                            </li>
+                        </ul>
                     </div>
-                </div>
-
-                <div class="controls">
-                    <button class="control-btn" id="shuffle-btn"><i class="fas fa-random"></i></button>
-                    <button class="control-btn" id="prev-btn"><i class="fas fa-step-backward"></i></button>
-                    <button class="control-btn play-btn" id="play-pause-btn">
-                        <i class="fas fa-play"></i>
-                    </button>
-                    <button class="control-btn" id="next-btn"><i class="fas fa-step-forward"></i></button>
-                    <button class="control-btn" id="repeat-btn"><i class="fas fa-redo-alt"></i></button>
-                </div>
-
-                <div class="volume-container">
-                    <i class="fas fa-volume-down"></i>
-                    <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="0.8">
-                    <i class="fas fa-volume-up"></i>
                 </div>
             </div>
         </main>
     </div>
-    
-    <script src="script.js"></script>
+    <script src="/TennaiBGM/script.js"></script>
 </body>
 </html>
